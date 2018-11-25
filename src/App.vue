@@ -3,10 +3,12 @@
     <div>
       <h2 class='player3d__header'>3D обзор товара, через покадровую смену фотографий</h2>
       <p class='player3d__description'>Клик на превью для старта. Повторный клик остановит просмотр. Можно поворачивать с помощью мыши</p>
-      <div class='player3d__columns'>
-        <Player3d :framesList='this.images' selectorStart="start" :intervalDefault="200" />
+      <div v-if='this.images.length > 0' class='player3d__columns'>
+        <div :class='this.active ? "" : "hide"'>
+          <Player3d :framesList='this.images' selectorStart="start" :intervalDefault="200" />
+        </div>
         <div id='start'>
-          <img class='preview__image' alt='preview'>
+          <img class='preview__image' :src='this.images[0]' alt='preview'>
           <div class='preview__play-icon'/>
         </div>
       </div>
@@ -23,6 +25,7 @@ export default {
   data() {
     return {
       images: [],
+      active: false,
     }
   },
   created() {
@@ -81,16 +84,19 @@ export default {
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translate(-50%, -100%);
         background: url("../src/assets/play.svg") no-repeat;
         background-size: cover;
-        /*opacity: 0.5;*/
+        opacity: 0.5;
       }
 
       &__image {
         mix-blend-mode: darken;
         opacity: 0.5;
       }
+    }
+    .hide {
+      display: none;
     }
   }
 </style>
