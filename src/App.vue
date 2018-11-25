@@ -1,28 +1,96 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class='player3d'>
+    <div>
+      <h2 class='player3d__header'>3D обзор товара, через покадровую смену фотографий</h2>
+      <p class='player3d__description'>Клик на превью для старта. Повторный клик остановит просмотр. Можно поворачивать с помощью мыши</p>
+      <div class='player3d__columns'>
+        <Player3d :framesList='this.images' selectorStart="start" :intervalDefault="200" />
+        <div id='start'>
+          <img class='preview__image' alt='preview'>
+          <div class='preview__play-icon'/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from "./components/HelloWorld.vue";
+import Player3d from './components/Player3d.vue';
+import axios from 'axios'
 
 export default {
   name: "app",
+  data() {
+    return {
+      images: [],
+    }
+  },
+  created() {
+    axios.get('https://private-5adf60-images3dapi.apiary-mock.com/images')
+      .then(response => {
+        // handle success
+        this.images = response.data;
+      })
+      .catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+  },
   components: {
-    HelloWorld
+    Player3d
   }
 };
 </script>
 
 <style lang="less">
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  body {
+    font-family: "Arial", "Segoe UI", "Roboto", "Helvetica Neue", sans-serif ;
+  }
+  .player3d {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    &__header {
+      font-weight: 400;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    &__description {
+      margin-bottom: 2rem;
+    }
+
+    &__container {
+      width: 20rem;
+      height: 30rem;
+    }
+
+    &__columns {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .preview {
+      position: relative;
+      background: #f5f5f5;
+      cursor: pointer;
+      &__play-icon {
+        width: 7rem;
+        height: 7rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: url("../src/assets/play.svg") no-repeat;
+        background-size: cover;
+        /*opacity: 0.5;*/
+      }
+
+      &__image {
+        mix-blend-mode: darken;
+        opacity: 0.5;
+      }
+    }
+  }
 </style>
