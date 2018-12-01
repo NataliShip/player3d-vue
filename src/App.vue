@@ -3,12 +3,12 @@
     <div>
       <h2 class='player3d__header'>3D обзор товара, через покадровую смену фотографий</h2>
       <p class='player3d__description'>Клик на превью для старта. Повторный клик остановит просмотр. Можно поворачивать с помощью мыши</p>
-      <div v-if='this.images.length > 0' class='player3d__columns'>
+      <div class='player3d__columns'>
         <div :class='this.active ? "" : "hide"'>
           <Player3d :framesList='this.images' selectorStart="start" :intervalDefault="200" />
         </div>
         <div id='start' class='preview'>
-          <img class='preview__image' :src='this.images[0]' alt='preview'>
+          <img v-if='this.images.length > 0' class='preview__image' :src='this.images[0]' alt='preview'>
           <div class='preview__play-icon'/>
         </div>
       </div>
@@ -78,6 +78,8 @@ export default {
       position: relative;
       background: #f5f5f5;
       cursor: pointer;
+      width: 347px;
+      height: 528px;
 
       &__play-icon {
         width: 7rem;
