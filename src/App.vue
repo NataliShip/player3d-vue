@@ -7,7 +7,7 @@
         <div :class='this.active ? "" : "hide"'>
           <Player3d :framesList='this.images' selectorStart="start" :intervalDefault="200" />
         </div>
-        <div id='start'>
+        <div id='start' class='preview'>
           <img class='preview__image' :src='this.images[0]' alt='preview'>
           <div class='preview__play-icon'/>
         </div>
@@ -78,13 +78,14 @@ export default {
       position: relative;
       background: #f5f5f5;
       cursor: pointer;
+
       &__play-icon {
         width: 7rem;
         height: 7rem;
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -100%);
+        transform: translate(-50%, -50%);
         background: url("../src/assets/play.svg") no-repeat;
         background-size: cover;
         opacity: 0.5;

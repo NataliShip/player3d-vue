@@ -9,7 +9,19 @@
     name: "Player3d",
     data() {
       return {
-
+        direction: 'left',
+        imagesList: [],
+        frames: [],
+        frameCurrent: 0,
+        mouseHandling: true,
+        mouseMoveStartTime: 0,
+        mouseMoveStartX: 0,
+        mouseX: 0,
+        pauseOnClick: true,
+        rotating: false,
+        timerID: null,
+        ctx: '',
+        interval: 0
       }
     },
     props: {
@@ -25,7 +37,7 @@
       framesList: {
         type: Array,
         required: true,
-        default: [],
+        default: () => [],
       }
     },
 
