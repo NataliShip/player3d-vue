@@ -1,5 +1,5 @@
 <template>
-  <div ref="container" class="player">
+  <div ref="container" class="player" @mousedown="this.mouseDownListener">
     <canvas ref="canvas"></canvas>
   </div>
 </template>
@@ -64,6 +64,7 @@ export default {
       };
       img.src = this.frames[this.frames.length - 1];
     },
+
     show() {
       if (!this.imagesList.length) {
         this.$refs.container.classList.add("loader");
@@ -77,6 +78,7 @@ export default {
         this.rotate();
       }
     },
+
     setCanvasRect() {
       if (
         this.$refs.container.offsetWidth &&
@@ -86,6 +88,7 @@ export default {
         this.$refs.canvas.height = this.$refs.container.offsetHeight;
       }
     },
+
     rotate() {
       this.drawFrameCurrent();
       let frameCurrent = this.setFrameNext();
@@ -94,6 +97,7 @@ export default {
       this.timerID = window.setTimeout(this.rotate, this.interval);
       this.rotating = true;
     },
+
     drawFrameCurrent() {
       const image = this.imagesList[this.frameCurrent];
       if (image) {
@@ -113,6 +117,7 @@ export default {
         );
       }
     },
+
     setFrameNext() {
       let frameNext;
       if (this.direction === c.DIRECTION_RIGHT) {
@@ -128,6 +133,7 @@ export default {
       }
       return frameNext;
     },
+
     calcInterval() {
       let intervalNext;
       const coefficient = Math.round(
@@ -139,11 +145,13 @@ export default {
           : this.$props.intervalDefault;
       return intervalNext;
     },
+
     rotateStop() {
       if (!this.timerID) return;
       window.clearTimeout(this.timerID);
       this.rotating = false;
     },
+
     resizePlayer() {
       if (this.imagesList.length) {
         this.rotateStop();
@@ -151,6 +159,69 @@ export default {
         this.rotate();
       }
     },
+
+    setRotateDirection(pageX) {
+      let directionNext;
+      if (pageX < this.mouseX) {
+        directionNext = c.DIRECTION_LEFT;
+      } else if (pageX > this.mouseX) {
+        directionNext = c.DIRECTION_RIGHT;
+      } else {
+        directionNext = this.direction;
+      }
+      return directionNext;
+    },
+
+    calcMouseSpeed(pageX) {
+      const mouseTravel = Math.abs(this.mouseMoveStartX - pageX);
+      const timeNow = new Date().getTime();
+      const timeDiff = timeNow - this.mouseMoveStartTime || 1;
+      let speed = Math.round(((mouseTravel * 6.5) / timeDiff) * 100 * 0.3);
+      speed =
+        speed > this.$props.intervalDefault
+          ? this.$props.intervalDefault
+          : speed;
+      speed = this.$props.intervalDefault - speed;
+      speed = speed < 5 ? 5 : speed;
+      return speed;
+    },
+
+    mouseDownListener(e) {
+      if (!this.rotating) {
+        this.pauseOnClick = false;
+      }
+      this.rotateStop();
+
+      this.mouseX = e.pageX;
+      this.mouseMoveStartX = e.pageX;
+      this.mouseMoveStartTime = new Date().getTime();
+
+      if (this.mouseHandling) {
+        document.addEventListener("mousemove", this.mousemoveListener);
+        document.addEventListener("mouseup", this.mouseupListener);
+      }
+    },
+
+    mousemoveListener(e) {
+      this.direction = this.setRotateDirection(e.pageX);
+      this.drawFrameCurrent();
+        this.frameCurrent = this.setFrameNext();
+        this.pauseOnClick = false;
+        this.mouseX = e.pageX;
+    },
+
+    mouseupListener(e) {
+      if (this.mouseHandling) {
+        document.removeEventListener("mousemove", this.mousemoveListener);
+        document.removeEventListener("mouseup", this.mouseupListener);
+      }
+      this.interval = this.calcMouseSpeed(e.pageX);
+      this.mouseMoveStartX = e.pageX;
+      if (!this.pauseOnClick) {
+        this.rotate();
+        this.pauseOnClick = true;
+      }
+    }
   },
 
   // life cycle hooks
@@ -158,10 +229,10 @@ export default {
     document
       .getElementById(this.$props.selectorStart)
       .addEventListener("click", this.show);
-    window.addEventListener('resize', this.resizePlayer)
+    window.addEventListener("resize", this.resizePlayer);
   },
   beforeDestroy() {
-    window.removeEventListener('resize', this.resizePlayer)
+    window.removeEventListener("resize", this.resizePlayer);
     const selectorStart = document.getElementById(this.$props.selectorStart);
     if (selectorStart) {
       selectorStart.removeEventListener("click", this.show);
