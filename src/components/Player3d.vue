@@ -1,5 +1,7 @@
 <template>
-  <div ref="container" class="player"><canvas ref="canvas"></canvas></div>
+  <div ref="container" class="player">
+    <canvas ref="canvas"></canvas>
+  </div>
 </template>
 
 <script>
@@ -66,6 +68,14 @@ export default {
       .getElementById(this.$props.selectorStart)
       .addEventListener("click", this.show);
     // window.addEventListener('resize', this.resizePlayer)
+  },
+  beforeDestroy() {
+    // window.removeEventListener('resize', this.resizePlayer)
+    const selectorStart = document.getElementById(this.state.selectorStart)
+    if (selectorStart) {
+      selectorStart.removeEventListener('click', this.show)
+    }
+    // this.rotateStop()
   }
 };
 </script>
