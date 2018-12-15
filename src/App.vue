@@ -106,5 +106,14 @@ export default {
     .hide {
       display: none;
     }
+    .loader {
+      width: 7rem;
+      height: 7rem;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: url("../src/assets/loader.gif") center no-repeat;
+    }
   }
 </style>
