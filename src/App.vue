@@ -4,7 +4,7 @@
       <h2 class='player3d__header'>3D обзор товара, через покадровую смену фотографий</h2>
       <p class='player3d__description'>Клик на превью для старта. Повторный клик остановит просмотр. Можно поворачивать с помощью мыши</p>
       <div class='player3d__columns'>
-        <div v-if='this.images.length > 0' :class='this.playerActive ? "" : "hide"'>
+        <div v-if='this.images.length > 0' :class='this.playerActive ? "player3d__container" : "player3d__container hide"'>
           <Player3d :framesList='this.images' selectorStart='start' :intervalDefault='200' />
         </div>
         <div id='start' :class='this.playerActive ? "hide" : "preview"' @click='this.playerStart'>
@@ -114,6 +114,11 @@ export default {
       left: 50%;
       transform: translate(-50%, -50%);
       background: url("../src/assets/loader.gif") center no-repeat;
+    }
+    .player {
+      width: 100%;
+      height: 100%;
+      cursor: grab;
     }
   }
 </style>
