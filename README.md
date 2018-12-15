@@ -1,4 +1,4 @@
-# player3d-vue
+# player3d-vue [![Build Status](https://travis-ci.com/NataliShip/player3d-vue.svg?branch=master)](https://travis-ci.com/NataliShip/player3d-vue)
 
 3D плеер на Vue для демонстрации товаров на 360° с использованием canvas через покадровую смену фотографий. Используется Canvas, как наиболее подходящий инструмент для управления пиксельными изображениями.
 
