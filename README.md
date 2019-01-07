@@ -10,6 +10,8 @@
 
 `selectorStart` - селектор (id) элемента, который будет запускать плеер
 
+**DEMO: http://reactapp.ru/3d-player-vue/**
+
 **Использование:**
 ```
 <div class='player3d__container'>
@@ -51,3 +53,5 @@ npm run lint
 ```
 npm run test:unit
 ```
+
+![Alt text](http://reactapp.ru/img/3d-player-vue.png "3d плеер Vue")
